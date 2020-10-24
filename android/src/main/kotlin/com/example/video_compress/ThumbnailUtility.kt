@@ -21,15 +21,15 @@ class ThumbnailUtility(channelName: String) {
     }
 
     fun getFileThumbnail(context: Context, path: String, quality: Int, position: Long,
-                             result: MethodChannel.Result) {
+                             result: MethodChannel.Result, outputpath: String) {
         val bmp = utility.getBitmap(path, position, result)
 
         val dir = context.getExternalFilesDir("video_compress")
 
         if (dir != null && !dir.exists()) dir.mkdirs()
 
-        val file = File(dir, path.substring(path.lastIndexOf('/'),
-                path.lastIndexOf('.')) + ".jpg")
+        val file = outputpath ==null ? File(dir, path.substring(path.lastIndexOf('/'),
+                path.lastIndexOf('.')) + ".jpg"): File(outputpath)
         utility.deleteFile(file)
 
         val stream = ByteArrayOutputStream()

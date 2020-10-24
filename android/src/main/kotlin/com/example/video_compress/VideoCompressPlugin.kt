@@ -55,8 +55,10 @@ class VideoCompressPlugin : MethodCallHandler, FlutterPlugin {
                 val path = call.argument<String>("path")
                 val quality = call.argument<Int>("quality")!!
                 val position = call.argument<Int>("position")!! // to long
+                var outputpath = call.argument<String>("outputpath")
+
                 ThumbnailUtility("video_compress").getFileThumbnail(context, path!!, quality,
-                        position.toLong(), result)
+                        position.toLong(), result, outputpath)
             }
             "getMediaInfo" -> {
                 val path = call.argument<String>("path")
@@ -82,10 +84,11 @@ class VideoCompressPlugin : MethodCallHandler, FlutterPlugin {
                 val duration = call.argument<Int>("duration")
                 val includeAudio = call.argument<Boolean>("includeAudio") ?: true
                 val frameRate = if (call.argument<Int>("frameRate")==null) 30 else call.argument<Int>("frameRate")
+                var outputpath = call.argument<String>("outputpath");
 
-                val tempDir: String = context.getExternalFilesDir("video_compress")!!.absolutePath
+                val tempDir: String = context.getExternalFilesDir("video_compress")!!.absolutePath;
                 val out = SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(Date())
-                val destPath: String = tempDir + File.separator + "VID_" + out + ".mp4"
+                val destPath: String = outputpath ?: (tempDir + File.separator + "VID_" + out + ".mp4");
 
                 var videoTrackStrategy: TrackStrategy = DefaultVideoStrategy.atMost(340).build();
                 val audioTrackStrategy: TrackStrategy

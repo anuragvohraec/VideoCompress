@@ -10,6 +10,13 @@ import '../media/media_info.dart';
 
 abstract class IVideoCompress extends CompressMixin {}
 
+class VideoCompressorEngine extends IVideoCompress{
+  final String outputdir;
+  VideoCompressorEngine(this.outputdir){
+    initProcessCallback();
+  }
+}
+
 class _VideoCompressImpl extends IVideoCompress {
   _VideoCompressImpl._() {
     initProcessCallback();
@@ -70,6 +77,7 @@ extension Compress on IVideoCompress {
   /// select the position unit in the video by [position] is seconds
   Future<File> getFileThumbnail(
     String path, {
+        String outputpath,
     int quality = 100,
     int position = -1,
   }) async {
@@ -80,6 +88,7 @@ extension Compress on IVideoCompress {
       'path': path,
       'quality': quality,
       'position': position,
+      'outputpath': outputpath
     });
 
     final file = File(filePath);
@@ -120,12 +129,13 @@ extension Compress on IVideoCompress {
   /// ```
   Future<MediaInfo> compressVideo(
     String path, {
-    VideoQuality quality = VideoQuality.DefaultQuality,
+      String outputpath,
+    VideoQuality quality = VideoQuality.LowQuality,
     bool deleteOrigin = false,
     int startTime,
     int duration,
     bool includeAudio,
-    int frameRate = 30,
+    int frameRate = 25,
   }) async {
     assert(path != null);
     if (isCompressing) {
@@ -148,6 +158,7 @@ extension Compress on IVideoCompress {
       'duration': duration,
       'includeAudio': includeAudio,
       'frameRate': frameRate,
+      'outputpath': outputpath
     });
 
     // ignore: invalid_use_of_protected_member
