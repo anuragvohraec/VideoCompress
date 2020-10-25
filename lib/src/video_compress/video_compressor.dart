@@ -11,8 +11,7 @@ import '../media/media_info.dart';
 abstract class IVideoCompress extends CompressMixin {}
 
 class VideoCompressorEngine extends IVideoCompress{
-  final String outputdir;
-  VideoCompressorEngine(this.outputdir){
+  VideoCompressorEngine(){
     initProcessCallback();
   }
 }
